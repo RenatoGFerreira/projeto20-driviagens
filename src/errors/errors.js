@@ -1,23 +1,37 @@
 function conflict(resource = "Item") {
     return {
         type: "conflict", 
-        message: resource==="Origin" ? "[ERRO] Você não pode escolher o destino igual ao local de origem" : `${resource} já existe!`
+        message: resource==="Origin" ? "[ERRO] A Origem e o destino precisam ser diferentes" : `${resource} já registrada!`
     }
 }
 
 function notFound (resource = "Item") {
     return {
         type: "notFound",
-        message: `${resource} [ERRO] Não encontrado!`
+        message: `${resource} não foi encontrado!`
     }
 }
 
 function unprocessableEntity ( resource = "Item", err ) {
     return {
         type: "unprocessableEntity",
-        message: resource === "Flight" ? "[ERRO] A data do seu voo deve ser posterior a data presente." : resource === "Schema" ? err : ""
+        message: resource === "Flight" ? "[ERRO] A data deve ser maior que a data de hoje" : resource === "Schema" ? err : resource === "Dates" ? "bigger-date e smaller-date devem ser passados juntos" : ""
+    }
+}
+
+function badRequest ( resource = "Item" ) {
+    return {
+        type: "badRequest",
+        message: resource==="Date" ? `[ERRO] É impossível viajar com estas datas` : ""
+    }
+}
+
+function internalServerError ( resource = "Item" ) {
+    return {
+        type: "internalServerError",
+        message: "Existem muitos resultados"
     }
 }
 
 
-export const errors = { conflict, notFound, unprocessableEntity }
+export const errors = { conflict, notFound, unprocessableEntity, badRequest, internalServerError }
